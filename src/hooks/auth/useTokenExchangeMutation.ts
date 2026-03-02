@@ -1,7 +1,9 @@
-import { AUTH_HINT_KEY, tokenExchange } from "@/apis/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { usersKeys } from "../users/usersKeys";
 import { useLocalStorage } from "usehooks-ts";
+
+import { AUTH_HINT_KEY } from "@/apis/api";
+import { tokenExchange } from "@/apis/auth";
+import { authKeys } from "@/hooks/auth/auth.keys";
 
 export default function useTokenExchangeMutation() {
   const queryClient = useQueryClient();
@@ -11,7 +13,7 @@ export default function useTokenExchangeMutation() {
     mutationFn: tokenExchange,
     onSuccess: () => {
       setAuthHint("true");
-      queryClient.invalidateQueries({ queryKey: usersKeys.me });
+      queryClient.invalidateQueries({ queryKey: authKeys.me });
     }
   });
 }

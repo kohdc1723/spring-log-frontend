@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -58,8 +58,16 @@ export default function SignUpPage() {
     <div className="w-full h-full flex items-center justify-center">
       <Card className="w-full max-w-md shadow-none">
         <CardHeader>
-          <CardTitle className="flex items-center justify-center">
+          <CardTitle className="flex flex-col gap-8 items-center justify-center">
             <SiSpring className="size-8" />
+            <div className="flex flex-col gap-2">
+              <h4 className="text-center">
+                Create your account
+              </h4>
+              <p className="text-center text-sm font-normal text-muted-foreground">
+                Welcome! Please fill in details to get started
+              </p>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-8">
@@ -81,54 +89,62 @@ export default function SignUpPage() {
               Continue with GitHub
             </Button>
           </div>
-          <Separator />
+          <div className="flex items-center justify-center gap-4">
+            <Separator className="flex-1" />
+            <span className="text-sm font-normal text-muted-foreground">
+              or
+            </span>
+            <Separator className="flex-1" />
+          </div>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-8"
           >
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field className="flex flex-col gap-1">
-                  <FieldLabel>
-                    Email
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="email"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Email"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field className="flex flex-col gap-1">
-                  <FieldLabel>
-                    Password
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="password"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Password"
-                    autoComplete="off"
-                    type="password"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
+            <div className="flex flex-col gap-4">
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="flex flex-col gap-1">
+                    <FieldLabel>
+                      Email address
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Enter your email address"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="flex flex-col gap-1">
+                    <FieldLabel>
+                      Password
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Enter your password"
+                      autoComplete="off"
+                      type="password"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
             <Button
               type="submit"
               variant="outline"
@@ -137,6 +153,15 @@ export default function SignUpPage() {
             >
               Sign Up
             </Button>
+            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <p>Already have an account?</p>
+              <Link
+                to="/sign-in"
+                className="underline hover:opacity-90"
+              >
+                Sign in
+              </Link>
+            </div>
           </form>
         </CardContent>
       </Card>

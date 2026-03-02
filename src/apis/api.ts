@@ -4,7 +4,8 @@ import axios, {
 } from "axios";
 
 import type { ApiResponse } from "@/apis/api.types";
-import { AUTH_HINT_KEY } from "@/apis/auth";
+
+export const AUTH_HINT_KEY = "spring_log_auth_hint";
 
 export const publicRequests = [
   "/api/v1/auth/sign-up",
@@ -63,9 +64,9 @@ apiClient.interceptors.response.use(undefined, async (error: AxiosError) => {
 
   const isUnauthorized = error.response?.status === 401;
   const isRetrying = originalRequest?._retry;
-  const isAuthEndpoint = originalRequest?.url?.includes("/auth/");
+  const isPublicRequest = publicRequests.some(path => originalRequest?.url?.includes(path));
 
-  if (originalRequest && isUnauthorized && !isRetrying && !isAuthEndpoint) {
+  if (originalRequest && isUnauthorized && !isRetrying && !isPublicRequest) {
     originalRequest._retry = true;
 
     const newAccessToken = await refreshAccessTokenOrNull();

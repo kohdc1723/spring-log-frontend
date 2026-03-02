@@ -1,12 +1,12 @@
-import { AUTH_HINT_KEY } from "@/apis/auth";
-import type { User } from "@/apis/user.types";
-import useMeQuery from "@/hooks/users/useMeQuery";
+import { AUTH_HINT_KEY } from "@/apis/api";
+import type { AuthUser } from "@/apis/auth.types";
+import useMeQuery from "@/hooks/auth/useMeQuery";
 import { createContext, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }

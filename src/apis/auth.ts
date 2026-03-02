@@ -1,6 +1,7 @@
 import { apiClient, setAccessToken } from "@/apis/api";
 import type { ApiResponse } from "@/apis/api.types";
 import type {
+  AuthUser,
   LoginRequest,
   LoginResponse,
   SignUpRequest,
@@ -9,7 +10,11 @@ import type {
   TokenExchangeResponse,
 } from "@/apis/auth.types";
 
-export const AUTH_HINT_KEY = "spring_log_auth_hint";
+export const getMe = async () => {
+  const response = await apiClient.get<ApiResponse<AuthUser>>("/api/v1/auth/me");
+
+  return response.data;
+}
 
 export const signUp = async (request: SignUpRequest) => {
   const response = await apiClient.post<ApiResponse<SignUpResponse>>("/api/v1/auth/sign-up", request);

@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocalStorage } from "usehooks-ts";
 
-import { AUTH_HINT_KEY, login } from "@/apis/auth";
-import { usersKeys } from "@/hooks/users/usersKeys";
+import { AUTH_HINT_KEY } from "@/apis/api";
+import { login } from "@/apis/auth";
+import { authKeys } from "@/hooks/auth/auth.keys";
 
 export default function useLoginMutation() {
   const queryClient = useQueryClient();
@@ -12,7 +13,7 @@ export default function useLoginMutation() {
     mutationFn: login,
     onSuccess: () => {
       setAuthHint("true");
-      queryClient.invalidateQueries({ queryKey: usersKeys.me });
+      queryClient.invalidateQueries({ queryKey: authKeys.me });
     }
   });
 }

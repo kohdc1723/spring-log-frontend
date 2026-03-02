@@ -16,29 +16,30 @@ export default function GlobalLayout() {
         <div className="flex items-center justify-between h-full px-6 w-full max-w-3xl">
           <Link
             to={"/"}
-            className="flex items-center gap-2"
+            className="flex items-center gap-4"
           >
-            <SiSpring className="size-6" />
-            <div className="font-bold">
+            <SiSpring className="size-8" />
+            <h1 className="font-bold text-lg">
               Spring Log
-            </div>
+            </h1>
           </Link>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
+              className="size-9 rounded-full p-0 flex items-center justify-center"
             >
               <SunIcon className="size-6" />
             </Button>
             {isLoading ? (
-              <Skeleton className="size-6 rounded-full" />
+              <Skeleton className="size-9 rounded-full" />
             ) : user ? (
-              <UserDropdownMenu />
+              <UserDropdownMenu user={user} />
             ) : null}
           </div>
         </div>
       </header>
-      <main className="flex-1 w-full max-w-3xl border-x p-6">
+      <main className="flex-1 w-full max-w-3xl border-x p-8">
         <Outlet />
         <Toaster position="bottom-right" />
       </main>
