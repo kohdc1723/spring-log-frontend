@@ -20,5 +20,9 @@ export interface Account {
 }
 
 export interface RefreshToken {
+  id: string;
   token: string;
+  prevToken: string | null;
+  createdAt: string;
+  rotatedAt: string | null;
 }

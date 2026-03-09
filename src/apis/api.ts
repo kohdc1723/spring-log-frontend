@@ -3,7 +3,7 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from "axios";
 
-import type { ApiResponse } from "@/apis/api.types";
+import type { ApiResponse, ErrorResponse } from "@/apis/api.types";
 
 export const AUTH_HINT_KEY = "spring_log_auth_hint";
 
@@ -59,7 +59,7 @@ apiClient.interceptors.request.use(async (config) => {
   return config;
 });
 
-apiClient.interceptors.response.use(undefined, async (error: AxiosError) => {
+apiClient.interceptors.response.use(undefined, async (error: AxiosError<ErrorResponse>) => {
   const originalRequest = error.config as CustomAxiosRequestConfig;
 
   const isUnauthorized = error.response?.status === 401;

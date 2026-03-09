@@ -11,13 +11,18 @@ import {
 import { Button } from "@/components/ui/button";
 import useLogoutMutation from "@/hooks/auth/useLogoutMutation";
 import type { AuthUser } from "@/apis/auth.types";
+import { toast } from "sonner";
 
 interface UserDropdownMenuProps {
   user: AuthUser;
 }
 
 export default function UserDropdownMenu({ user }: UserDropdownMenuProps) {
-  const { mutate: logout } = useLogoutMutation();
+  const { mutate: logout } = useLogoutMutation({
+    onError: () => {
+      toast.error("Failed to logout");
+    }
+  });
   const initials = user.email.slice(0, 2).toUpperCase();
 
   const handleLogout = () => logout();
@@ -53,6 +58,7 @@ export default function UserDropdownMenu({ user }: UserDropdownMenuProps) {
             <img
               src={user.profileImageUrl}
               alt="profile-image"
+              referrerPolicy="no-referrer"
               className="size-9 rounded-full object-cover"
             />
           ) : (

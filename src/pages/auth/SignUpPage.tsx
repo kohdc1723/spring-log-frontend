@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub, SiSpring } from "react-icons/si";
 import useSignUp from "@/hooks/auth/useSignUpMutation";
+import { ErrorMessages } from "@/errors/error-messages";
 
 const SignUpFormSchema = z.object({
   email: z.email().min(1, { message: "Email is required" }),
@@ -31,19 +32,20 @@ export default function SignUpPage() {
 
   const {
     mutate: signUp,
+    reset,
     isPending,
-  } = useSignUp();
+    isError,
+    error,
+  } = useSignUp({
+    onSuccess: () => {
+      navigate("/sign-in");
+      toast.success("You have successfully signed up");
+    }
+  });
 
   const onSubmit = (data: z.infer<typeof SignUpFormSchema>) => {
-    signUp(data, {
-      onSuccess: () => {
-        navigate("/sign-in");
-        toast.success("You have successfully signed up");
-      },
-      onError: () => {
-        toast.error("temp error message");
-      }
-    })
+    reset();
+    signUp(data);
   }
 
   const handleGoogleSocialLogin = () => {
@@ -112,6 +114,10 @@ export default function SignUpPage() {
                     <Input
                       {...field}
                       id="email"
+                      onChange={(e) => {
+                        reset();
+                        field.onChange(e);
+                      }}
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter your email address"
                       autoComplete="off"
@@ -133,6 +139,10 @@ export default function SignUpPage() {
                     <Input
                       {...field}
                       id="password"
+                      onChange={(e) => {
+                        reset();
+                        field.onChange(e);
+                      }}
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter your password"
                       autoComplete="off"
@@ -145,6 +155,15 @@ export default function SignUpPage() {
                 )}
               />
             </div>
+            {isError && (
+              <p className="text-sm text-destructive text-center">
+                {error.response?.data.code ? (
+                  ErrorMessages[error.response?.data.code as keyof typeof ErrorMessages]
+                ) : (
+                  "An unknown error occurred"
+                )}
+              </p>
+            )}
             <Button
               type="submit"
               variant="outline"

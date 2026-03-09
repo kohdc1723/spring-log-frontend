@@ -5,12 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import useLogin from "@/hooks/auth/useLoginMutation";
+import useLoginMutation from "@/hooks/auth/useLoginMutation";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub, SiSpring } from "react-icons/si";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { ErrorMessages } from "@/errors/error-messages";
 
 const LoginFormSchema = z.object({
   email: z.email().min(1, { message: "Email is required" }),
@@ -30,18 +31,19 @@ export default function SignInPage() {
 
   const {
     mutate: login,
+    reset,
     isPending,
-  } = useLogin();
+    isError,
+    error,
+  } = useLoginMutation({
+    onSuccess: () => {
+      navigate("/");
+    },
+  });
 
   const onSubmit = (data: z.infer<typeof LoginFormSchema>) => {
-    login(data, {
-      onSuccess: () => {
-        navigate("/");
-      },
-      onError: () => {
-        
-      }
-    })
+    reset();
+    login(data);
   }
 
   const handleGoogleSocialLogin = () => {
@@ -110,6 +112,10 @@ export default function SignInPage() {
                     <Input
                       {...field}
                       id="email"
+                      onChange={(e) => {
+                        reset();
+                        field.onChange(e);
+                      }}
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter your email address"
                       autoComplete="off"
@@ -131,6 +137,10 @@ export default function SignInPage() {
                     <Input
                       {...field}
                       id="password"
+                      onChange={(e) => {
+                        reset();
+                        field.onChange(e);
+                      }}
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter your password"
                       autoComplete="off"
@@ -143,6 +153,15 @@ export default function SignInPage() {
                 )}
               />
             </div>
+            {isError && (
+              <p className="text-sm text-destructive text-center">
+                {error.response?.data.code ? (
+                  ErrorMessages[error.response?.data.code as keyof typeof ErrorMessages]
+                ) : (
+                  "An unknown error occurred"
+                )}
+              </p>
+            )}
             <Button
               type="submit"
               variant="outline"

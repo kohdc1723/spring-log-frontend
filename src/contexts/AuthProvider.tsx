@@ -1,9 +1,13 @@
+import {
+  createContext,
+  useContext,
+  useMemo,
+} from "react";
+import { useLocalStorage } from "usehooks-ts";
+
+import useMeQuery from "@/hooks/auth/useMeQuery";
 import { AUTH_HINT_KEY } from "@/apis/api";
 import type { AuthUser } from "@/apis/auth.types";
-import useMeQuery from "@/hooks/auth/useMeQuery";
-import { createContext, useContext, useMemo } from "react";
-import type { ReactNode } from "react";
-import { useLocalStorage } from "usehooks-ts";
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -19,7 +23,7 @@ const AuthContext = createContext<AuthContextType>({
 
 export const useAuth = () => useContext(AuthContext);
 
-export default function AuthProvider({ children }: { children: ReactNode }) {
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authHint] = useLocalStorage(AUTH_HINT_KEY, "false");
   const isLoggedIn = authHint === "true";
 
@@ -31,7 +35,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     enabled: !!isLoggedIn,
   });
 
-  const user = me?.data ?? null;
+  const user = me ?? null;
   const isPending = isLoggedIn && (isLoading || isFetching);
 
   const value = useMemo(() => ({
