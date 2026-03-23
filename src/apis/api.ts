@@ -30,13 +30,13 @@ export const getAccessToken = () => accessToken;
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
-  timeout: 10 * 1000, // 10 seconds
+  timeout: 30 * 1000, // 30 seconds
 });
 
 const refreshClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
-  timeout: 10 * 1000, // 10 seconds
+  timeout: 30 * 1000, // 30 seconds
 });
 
 let refreshPromise: Promise<string | null> | null = null;
