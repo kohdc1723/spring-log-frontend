@@ -9,7 +9,7 @@ import {
   PopoverTitle,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import type { DecodedRefreshToken } from "@/types/admin/decoded-refresh-token";
+import type { DecodedRefreshToken } from "@/hooks/admin/users/useAllUsersQuery";
 
 interface RefreshTokenPopoverProps {
   decodedRefreshToken: DecodedRefreshToken;

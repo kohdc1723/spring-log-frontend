@@ -112,10 +112,7 @@ const userColumns: ColumnDef<UserWithDecodedRefreshTokens, any>[] = [
 ];
 
 export default function AdminUserTable() {
-  const {
-    data: allUsers,
-    isLoading,
-  } = useAllUsersQuery();
+  const { data: allUsers } = useAllUsersQuery();
 
   return (
     <DataTable

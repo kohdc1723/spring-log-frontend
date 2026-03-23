@@ -12,7 +12,7 @@ import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
 import { PiPasswordBold } from "react-icons/pi";
 
-import type { Account } from "@/apis/admin.types";
+import type { Account } from "@/apis/user.types";
 
 interface AccountPopoverProps {
   email: string;
