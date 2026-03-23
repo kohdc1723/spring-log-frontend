@@ -16,6 +16,7 @@ import GlobalLayout from "@/components/layouts/GlobalLayout";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import PublicRoute from "@/routes/PublicRoute";
 import OAuth2CallbackPage from "@/pages/auth/OAuth2CallbackPage";
+import EmailVerificationPage from "@/pages/auth/EmailVerificationPage";
 import AuthProvider from "@/contexts/AuthProvider";
 import { Role } from "@/types/role";
 import AdminPage from "@/pages/admin/AdminPage";
@@ -30,6 +31,8 @@ export default function App() {
               <Route path="sign-in" element={<SignInPage />} />
               <Route path="sign-up" element={<SignUpPage />} />
               <Route path="forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="reset-password" element={<ResetPasswordPage />} />
+              <Route path="email-verification" element={<EmailVerificationPage />} />
               <Route path="oauth2/callback" element={<OAuth2CallbackPage />} />
             </Route>
 
@@ -37,7 +40,6 @@ export default function App() {
               <Route path="/" element={<IndexPage />} />
               <Route path="post/:postId" element={<PostDetailPage />} />
               <Route path="profile/:userId" element={<ProfileDetailPage />} />
-              <Route path="reset-password" element={<ResetPasswordPage />} />
 
               <Route path="admin" element={<ProtectedRoute allowedRoles={[Role.ADMIN]} />}>
                 <Route index element={<AdminPage />} />

@@ -2,8 +2,10 @@ import { apiClient, setAccessToken } from "@/apis/api";
 import type { ApiResponse } from "@/apis/api.types";
 import type {
   AuthUser,
+  ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
+  ResetPasswordRequest,
   SignUpRequest,
   SignUpResponse,
   TokenExchangeRequest,
@@ -39,4 +41,31 @@ export const tokenExchange = async (request: TokenExchangeRequest) => {
   setAccessToken(response.data.data.accessToken);
   
   return response.data.data;
+}
+
+export const verifyEmail = async (token: string) => {
+  const response = await apiClient.get<ApiResponse<null>>("/api/v1/auth/email-verification", {
+    params: { token }
+  });
+
+  return response.data.data;
+}
+
+export const resendVerificationEmail = async (email: string) => {
+  const response = await apiClient.post<ApiResponse<null>>("/api/v1/auth/resend-verification-email", { email });
+
+  return response.data.data;
+}
+
+export const forgotPassword = async ({
+  email
+}: ForgotPasswordRequest) => {
+  await apiClient.post<ApiResponse<null>>("/api/v1/auth/forgot-password", { email });
+}
+
+export const resetPassword = async ({
+  token,
+  newPassword
+}: ResetPasswordRequest) => {
+  await apiClient.post<ApiResponse<null>>("/api/v1/auth/reset-password", { token, newPassword });
 }

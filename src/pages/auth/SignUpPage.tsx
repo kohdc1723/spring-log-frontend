@@ -39,7 +39,7 @@ export default function SignUpPage() {
   } = useSignUp({
     onSuccess: () => {
       navigate("/sign-in");
-      toast.success("You have successfully signed up");
+      toast.success("Please verify your email address to continue");
     }
   });
 

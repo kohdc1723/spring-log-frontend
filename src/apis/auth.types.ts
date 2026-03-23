@@ -36,3 +36,12 @@ export interface TokenExchangeRequest {
 export interface TokenExchangeResponse {
   accessToken: string;
 }
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}

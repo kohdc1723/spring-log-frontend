@@ -12,6 +12,8 @@ import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { ErrorMessages } from "@/errors/error-messages";
+import useResendVerificationEmailMutation from "@/hooks/auth/useResendVerificationEmailMutation";
+import { toast } from "sonner";
 
 const LoginFormSchema = z.object({
   email: z.email().min(1, { message: "Email is required" }),
@@ -41,9 +43,25 @@ export default function SignInPage() {
     },
   });
 
+  const {
+    mutate: resendVerificationEmail,
+    isPending: isResendingVerificationEmail,
+  } = useResendVerificationEmailMutation({
+    onSuccess: () => {
+      toast.success("New verification email has been sent to your email address");
+    },
+    onError: (error) => {
+      toast.error(ErrorMessages[error.response?.data.code as keyof typeof ErrorMessages]);
+    },
+  })
+
   const onSubmit = (data: z.infer<typeof LoginFormSchema>) => {
     reset();
     login(data);
+  }
+
+  const handleResendVerificationEmail = () => {
+    resendVerificationEmail(form.getValues("email"));
   }
 
   const handleGoogleSocialLogin = () => {
@@ -154,13 +172,28 @@ export default function SignInPage() {
               />
             </div>
             {isError && (
-              <p className="text-sm text-destructive text-center">
+              <div className="flex flex-col justify-center items-center gap-2">
                 {error.response?.data.code ? (
-                  ErrorMessages[error.response?.data.code as keyof typeof ErrorMessages]
+                  <p className="text-sm text-destructive text-center">
+                    {ErrorMessages[error.response?.data.code as keyof typeof ErrorMessages]}
+                  </p>
                 ) : (
-                  "An unknown error occurred"
+                  <p className="text-sm text-destructive text-center">
+                    An unknown error occurred
+                  </p>
                 )}
-              </p>
+                {error.response?.data.code === "EMAIL_NOT_VERIFIED" && (
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={handleResendVerificationEmail}
+                    disabled={isResendingVerificationEmail}
+                    className="text-muted-foreground underline"
+                  >
+                    Resend
+                  </Button>
+                )}
+              </div>
             )}
             <Button
               type="submit"
@@ -170,14 +203,24 @@ export default function SignInPage() {
             >
               Sign In
             </Button>
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <p>Don't have an account?</p>
-              <Link
-                to="/sign-up"
-                className="underline hover:opacity-90"
-              >
-                Sign up
-              </Link>
+            <div className="flex flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
+              <p className="flex items-center justify-center gap-2">
+                <p>Don't have an account?</p>
+                <Link
+                  to="/sign-up"
+                  className="underline hover:opacity-90"
+                >
+                  Sign up
+                </Link>
+              </p>
+              <p>
+                <Link
+                  to="/forgot-password"
+                  className="underline hover:opacity-90"
+                >
+                  Forgot password?
+                </Link>
+              </p>
             </div>
           </form>
         </CardContent>

@@ -12,6 +12,7 @@ export const publicRequests = [
   "/api/v1/auth/login",
   "/api/v1/auth/token",
   "/api/v1/auth/refresh",
+  "/api/v1/auth/email-verification",
 ] as const;
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
